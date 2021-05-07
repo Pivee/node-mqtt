@@ -1,13 +1,12 @@
-import * as mqtt from "mqtt";
+import { MqttClient } from "./client/client";
 
-const client = mqtt.connect("mqtt://localhost:1883");
-
-client.on("connect", () => {
-  client.subscribe("hello");
-
-  console.log("Client has subscribed");
+const client = new MqttClient("mqtt://localhost:1883", {
+  topics: ["hello"],
+  controllers: [
+    (topic: string, message: any) => {
+      console.log(message.toString());
+    },
+  ],
 });
 
-client.on("message", (topic, message: any) => {
-  console.log(message.toString());
-});
+client.subscribe({ logging: true });

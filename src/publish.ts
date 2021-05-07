@@ -1,13 +1,18 @@
-import * as mqtt from "mqtt";
+import { MqttClient } from "./client/client";
 
-const client = mqtt.connect("mqtt://localhost:1883");
+const client = new MqttClient("mqtt://localhost:1883");
 
-client.on("connect", () => {
+function publishHelloWorldMessage() {
   const interval = 5000;
   let timeCounter = 0;
 
   setInterval(() => {
     timeCounter = timeCounter + interval / 1000;
-    client.publish("hello", `Hello World! (${timeCounter}s).`);
+
+    const message = `Hello World! (${timeCounter}s).`;
+
+    client.publish("hello", message, { logging: true });
   }, interval);
-});
+}
+
+publishHelloWorldMessage();
